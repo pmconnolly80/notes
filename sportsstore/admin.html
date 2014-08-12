@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Admin</title>
+  <link href="../../css/bootstrap.css" rel="stylesheet" />
+  <link href="../../css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../js/angular.js"></script>
+
+  <script>
+    var myApp = angular.module("myApp", []);
+    
+    myApp
+
+    .constant('PARSE_API_ENDPOINT', 'https://api.parse.com/1')
+    .constant('PARSE_APP_ID', 'Qy0pNFI8sNeqeDZQizNjTUC6xHOzNc3G8pC2P4WP')
+    .constant('PARSE_REST_API_KEY', 'UStYUtESj8D3B6WKlGAjbxwh8pztU6uK0sMPVMvC')
+
+    // .run(function($http, PARSE_APP_ID, PARSE_REST_API_KEY) {
+    //   $http.defaults.headers.common['X-Parse-Application-Id'] = PARSE_APP_ID;
+    //   $http.defaults.headers.common['X-Parse-REST-API-Key'] = PARSE_REST_API_KEY;
+    // })
+
+    .factory('Auth', function() {
+
+    })
+
+    // Requests to the Parse REST API
+    .factory('ParseQuery', ['$http', 'PARSE_API_ENDPOINT', 'PARSE_APP_ID', 'PARSE_REST_API_KEY',
+      function($http, PARSE_API_ENDPOINT, PARSE_APP_ID, PARSE_REST_API_KEY) {
+      
+      }
+    ])
+
+    .controller('appCtrl', ['$scope', '$http', 'PARSE_API_ENDPOINT', 'PARSE_APP_ID', 'PARSE_REST_API_KEY',
+                  function($scope, $http, PARSE_API_ENDPOINT, PARSE_APP_ID, PARSE_REST_API_KEY) {
+
+      var parse_headers = {'X-Parse-Application-Id': PARSE_APP_ID, 'X-Parse-REST-API-Key': PARSE_REST_API_KEY};
+
+      $scope.createUser = function(creds) {
+        var url = PARSE_API_ENDPOINT + '/users';
+
+        $http({method: 'POST', url: url, headers: parse_headers, data: creds}).
+          success(function(data, status, headers, config) {
+            console.log('success', data);
+            // this callback will be called asynchronously
+            // when the response is available
+          }).
+          error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.log('error', data.error);
+          });
+      }
+
+      $scope.getCurrentUser = function() {
+        var url = PARSE_API_ENDPOINT + '/users/me';
+        $http({method: 'GET', url: url, headers: parse_headers}).
+          success(function(data, status, headers, config) {
+            console.log('success', data);
+            // this callback will be called asynchronously
+            // when the response is available
+          }).
+          error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.log('error', data.error);
+          });
+      }
+
+      $scope.login = function(creds) {
+        
+        var url = PARSE_API_ENDPOINT + '/login?username=' + encodeURIComponent(creds.username) + '&password=' + encodeURIComponent(creds.password);
+        
+        $http({method: 'GET', url: url, headers: parse_headers}).
+          success(function(data, status, headers, config) {
+            console.log('success', data);
+            // this callback will be called asynchronously
+            // when the response is available
+          }).
+          error(function(data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.log('error', data.error);
+          });
+      }
+    }]);
+  </script>
+</head>
+<body ng-controller="appCtrl">
+  <h1>Admin</h1>
+
+  <div class="row container">
+    <div class="col-sm-12">
+
+      <form role="form" novalidate>
+        <div class="form-group">
+          <label>Email address</label>
+          <input type="text" class="form-control" placeholder="Username" ng-model="creds.username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="Password" ng-model="creds.password">
+        </div>
+        <button type="button" class="btn btn-default" ng-click="createUser(creds)">createUser</button>
+        <button type="button" class="btn btn-default" ng-click="login(creds)">Login</button>
+      </form>
+
+      <p><button type="button" class="btn btn-default" ng-click="getCurrentUser()">getCurrentUser</button></p>
+
+      <pre>{{creds|json}}</pre>
+    </div><!-- .col-sm-12 -->
+  </div><!-- .row -->
+
+</body>
+</html>

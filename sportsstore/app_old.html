@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <title>Les films de Vince</title>
+  <link href="../../css/bootstrap.css" rel="stylesheet" />
+  <link href="../../css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../js/angular.js"></script>
+
+  <script src="bower_components/angular-dreamfactory/angular-dreamfactory"></script>
+  <script>
+    var myApp = angular.module("myApp", ['ngDreamFactory']);
+    
+    myApp
+
+    .constant('DSP_URL', 'https://dsp-angular.cloud.dreamfactory.com/')
+    .constant('DSP_API_KEY', 'ng-workshop')
+
+    .factory('VinceUser', function() {
+      var User = {};
+      return User;
+    })
+
+    .run(function($rootScope, VinceUser) {
+      // Parse.initialize("Qy0pNFI8sNeqeDZQizNjTUC6xHOzNc3G8pC2P4WP", "ul7l1y5QwePs22KMBnPWa8cF05XGlA2Y9OQrLF9h");
+
+      $rootScope.sessionUser = VinceUser;
+    })
+
+    .controller('appCtrl', ['$scope', 'DreamFactory' function($scope, DreamFactory) {
+
+      // model for login credentials
+      $scope.creds = {
+        email: '',
+        password: ''
+      }
+
+      // Login function
+      $scope.loginFunc = function() {
+
+        // Call to the DreamFactory user service using provided login method
+        DreamFactory.api.user.login($scope.creds,
+
+          // Success function
+          function(data) {
+            console.log('success', data);
+            // Handle login success
+          },
+
+          // Error function
+          function(error) {
+            console.log('success', data);
+            // Handle Login failure
+          }
+      }
+
+      $scope.runQuery = function() {
+        console.log('runQuery');
+
+        // var query = new Parse.Query(TestObject);
+
+        // query.find({
+        // // query.get('dcPKqDVISW', {
+        //   success: function(testObj) {
+        //     // The object was retrieved successfully.
+        //     console.log('testObj', testObj);
+        //     // console.log('testObj.foo', testObj.getFoo());
+        //     // console.log('testObj.foo', testObj.get('foo'));
+        //     $scope.items = testObj;
+        //   },
+        //   error: function(object, error) {
+        //     // The object was not retrieved successfully.
+        //     // error is a Parse.Error with an error code and description.
+        //     console.log('error', error);
+        //   }
+        // });
+      }
+
+    }]);
+  </script>
+</head>
+<body ng-controller="appCtrl">
+  <p><button class="btn btn-default" ng-click="loginFunc()">loginFunc()</button></p>
+
+  <ul>
+    <li ng-repeat="item in items">{{item.foo}}</li>
+  </ul>
+</body>
+</html>

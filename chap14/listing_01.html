@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>Filters</title>
+  <link href="../../css/bootstrap.css" rel="stylesheet" />
+  <link href="../../css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../js/angular.js"></script>
+  <script>
+    angular.module("exampleApp", [])
+      
+      .controller("defaultCtrl", function ($scope) { })
+      
+      .filter("labelCase", function() {
+        return function(value, reverse) {
+          if (angular.isString(value)) {
+            var intermediate = reverse ? value.toUpperCase() : value.toLowerCase();
+            return (reverse ? intermediate[0].toLowerCase() :
+              intermediate[0].toUpperCase()) + intermediate.substr(1);
+          } else {
+            return value;
+          }
+        };
+      });
+  </script>
+</head>
+
+<body ng-controller="defaultCtrl">
+  <div class="panel panel-default">
+    <p>{{'Bonjour' | labelCase }}</p>
+    <p>{{'Bonjour' | labelCase:true }}</p>
+  </div>
+</body>
+</html>

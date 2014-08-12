@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>Filters</title>
+  <link href="../../css/bootstrap.css" rel="stylesheet" />
+  <link href="../../css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../js/angular.js"></script>
+  <script>
+    angular.module("exampleApp", [])
+      
+      .controller("defaultCtrl", function ($scope) {
+        $scope.products = ['Pomme', 'Poire', 'Banane', 'Framboise', 'Fraise'];
+      })
+      
+      .filter("skip", function() {
+        return function(data, count) {
+          if (angular.isArray(data) && angular.isNumber(count)) {
+            if (count > data.length || count < 1) {
+              return data;
+            } else {
+              return data.slice(count);
+            }
+          } else {
+            return data;
+          }
+        }
+      });
+  </script>
+</head>
+
+<body ng-controller="defaultCtrl">
+  <div class="panel panel-default">
+    <ul>
+      <li ng-repeat="p in products | skip:2">{{p}}</li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="filmApp">
+<head>
+  <title>Les films de Vince</title>
+  <link href="../../css/bootstrap.css" rel="stylesheet" />
+  <link href="../../css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../../js/angular.js"></script>
+  <script>
+    var filmApp = angular.module("filmApp", []);
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Les films de Vince</h1>
+  </header>
+  <div class="panel">
+    <div class="input-group">
+      <input class="form-control" />
+      <span class="input-group-btn">
+        <button class="btn btn-default">Ajouter</button>
+      </span>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Vu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Rosemary's Baby</td><td>Non</td></tr>
+        <tr><td>Bienvenue chez les Ch'tis</td><td>Oui</td></tr>
+        <tr><td>Harold et Maude</td><td>Non</td></tr>
+        <tr><td>Intouchables</td><td>Oui</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
