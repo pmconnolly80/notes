@@ -2,7 +2,7 @@
 AngularJS Notes
 ===============
 
-Code samples from books or articles about AngularJS (https://angularjs.org/).
+Code samples from AngularJS books or articles that I read.
 
 
 Looking for a high-quality AngularJS training?
