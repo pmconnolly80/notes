@@ -6,7 +6,7 @@
   <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
   <script src="../assets/js/angular.js"></script>
   <script type="text/ng-template" id="scopeTemplate">
-    <p>Value of <code>local</code> (in directive): {{local}}</p>
+    <p>Value of <code>local</code> (in directive): <input ng-model="local" /></p>
   </script>
   <script>
     angular.module("exampleApp", [])
@@ -17,7 +17,7 @@
             return angular.element(document.querySelector("#scopeTemplate")).html();
           },
           scope: {
-            local: "@nameprop"
+            local: "=nameprop"
           }
         };
       })
@@ -32,8 +32,7 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <p>Direct Binding: <input ng-model="data.name" /></p>
-      <p scope-demo nameprop="{{data.name}}"></p>
-      <p scope-demo nameprop="{{data.name + ' Freeman'}}"></p>
+      <p scope-demo nameprop="data.name"></p>
   </div>
 </body>
 </html>
