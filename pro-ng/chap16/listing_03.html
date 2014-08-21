@@ -5,19 +5,33 @@
   <link href="../assets/css/bootstrap.css" rel="stylesheet" />
   <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
   <script src="../assets/js/angular.js"></script>
+  <script type="text/ng-template" id="scopeTemplate">
+    <div class="panel-body">
+      <p>Name: <input ng-model="data.name" /></p>
+      <p>City: <input ng-model="city" /></p>
+      <p>Country: <input ng-model="country" /></p>
+    </div>
+  </script>
   <script>
     angular.module("exampleApp", [])
 
       .directive("scopeDemo", function () {
         return {
-          template: "<div class='panel-body'>Name: <input ng-model=name /></div>"
+          template: function() {
+            return angular.element(document.querySelector("#scopeTemplate")).html();
+          },
+          scope: true
         };
       })
 
       .controller("scopeCtrl", function ($scope) {
-        // do nothing - no behaviours required
+        $scope.data = { name: "Adam" };
+        $scope.city = "London";
       })
 
+      .controller("secondCtrl", function ($scope) {
+        // do nothing - no behaviours required
+      });
   </script>
 </head>
 
