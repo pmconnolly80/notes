@@ -12,14 +12,27 @@
         return function (scope, element, attrs) {
           var data = scope[attrs["unorderedList"]];
           var propertyName = attrs["listProperty"];
+
           var propertyExpression = attrs["listPropertyExpr"];
           if (angular.isArray(data)) {
             var listElem = angular.element("<ul>");
             element.append(listElem);
             for (var i = 0; i < data.length; i++) {
-              listElem.append(angular.element('<li>').text(data[i][propertyName] + ' - ' + scope.$eval(propertyExpression, data[i])));
+              (function() {
+                var itemElement = angular.element('<li>');
+                listElem.append(itemElement);
+                var index = i;
+                var watcherFn = function (watchScope) {
+                  return watchScope.$eval(propertyExpression, data[index]);
+                }
+                scope.$watch(watcherFn, function (newValue, oldValue) {
+                  itemElement.text(newValue);
+                });
+              }());
             }
           }
+
+
         }
       })
 
@@ -47,7 +60,7 @@
       <button class="btn btn-primary" ng-click="incrementPrices()">
         Change Prices
       </button>
-      <div unordered-list="products" list-property="name" list-property-expr="price | currency"></div>
+      <div unordered-list="products" list-property="price" list-property-expr="price"></div>
     </div>
   </div>
 </body>
