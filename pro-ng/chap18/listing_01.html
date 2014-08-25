@@ -21,7 +21,9 @@
         return {
           scope: { counter: "=counter" },
           link: function (scope, element, attrs) {
-            console.log('attrs', attrs);
+            // NB. Ce event handler intercepte les clics sur le <div>
+            // qui encadre les boutons (auquel la directive a été appliquée),
+            // pas sur les boutons eux-mêmes !
             element.on("click", function (event) {
               console.log("Button click: " + event.target.innerText);
               scope.$apply(function () {
