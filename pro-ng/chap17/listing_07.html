@@ -41,13 +41,19 @@
 
             ctrl.$parsers.push(validateParser);
 
+            ctrl.$formatters.push(function (value) {
+              return value == "Huh?" ? "Not Sure" : value;
+            });
+
             element.on("click", function (event) {
               setSelected(event.target.innerText);
               scope.$apply(function () {
-                  ctrl.$setViewValue(event.target.innerText);
+                ctrl.$setViewValue(event.target.innerText);
               });
             });
 
+            // Cette méthode se charge d'ajouter une classe CSS
+            // pour mettre en surbrillance le bouton en cours.
             var setSelected = function (value) {
               var buttons = element.find("button");
               buttons.removeClass("btn-primary");
@@ -70,6 +76,15 @@
 <body ng-controller="defaultCtrl">
   <form name="myForm" novalidate>
     <div><tri-button name="decision" ng-model="dataValue" /></div>
+    <div class="well">
+      Value:
+      <select ng-model="dataValue">
+        <option>Yes</option>
+        <option>No</option>
+        <option>Not Sure</option>
+        <option>Huh?</option>
+      </select>
+    </div>
   </form>
 </body>
 </html>

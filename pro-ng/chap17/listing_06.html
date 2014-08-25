@@ -26,6 +26,8 @@
           require: "ngModel",
           template: document.querySelector("#triTemplate").outerText,
           link: function (scope, element, attrs, ctrl) {
+            // Cette méthode se charge d'ajouter une classe CSS
+            // pour mettre en surbrillance le bouton en cours.
             var setSelected = function (value) {
               var buttons = element.find("button");
               buttons.removeClass("btn-primary");
@@ -35,7 +37,9 @@
                 }
               }
             }
-            setSelected(scope.dataValue);
+            ctrl.$render = function () {
+              setSelected(ctrl.$viewValue || "Not Sure");
+            }
           }
         }
       });
