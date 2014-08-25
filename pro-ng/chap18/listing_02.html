@@ -5,6 +5,7 @@
   <link href="../assets/css/bootstrap.css" rel="stylesheet" />
   <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
   <script src="../assets/js/angular.js"></script>
+  <script src="directives.js"></script>
     <script>
       angular.module("exampleApp", [])
         .controller("defaultCtrl", function ($scope) {
@@ -16,23 +17,6 @@
           $scope.$watch('data.totalClicks', function (newVal) {
             console.log("Total click count: " + newVal);
           });
-        })
-        .directive("triButton", function () {
-          return {
-            scope: { counter: "=counter" },
-            link: function (scope, element, attrs) {
-              // NB. Ce event handler intercepte les clics sur le <div>
-              // qui encadre les boutons (auquel la directive a été appliquée),
-              // pas sur les boutons eux-mêmes ! On récupère une référence
-              // au bouton cliqué grâce à "event.target".
-              element.on("click", function (event) {
-                console.log("Button click: " + event.target.innerText);
-                scope.$apply(function () {
-                  scope.counter++;
-                });
-              });
-            }
-          }
         });
     </script>
 </head>
