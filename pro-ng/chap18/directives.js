@@ -1,4 +1,4 @@
-angular.module("exampleApp")
+angular.module("customDirectives", [])
   .directive("triButton", function () {
     return {
       scope: { counter: "=counter" },
