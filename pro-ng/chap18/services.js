@@ -4,6 +4,6 @@ angular.module("customServices", [])
     return {
       log: function (msg) {
         console.log("(LOG + " + messageCount++ + ") " + msg);
-    }
-  };
-});
+      }
+    };
+  });
