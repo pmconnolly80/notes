@@ -9,9 +9,6 @@
     <td>{{item.name}}</td>
     <td><input ng-model='item.quantity' /></td>
   </script>
-  <script type="text/ng-template" id="resetTemplate">
-    <td colspan="2"><button ng-click="reset()">Reset</button></td>
-  </script>
   <script>
       angular.module("exampleApp", [])
       .controller("defaultCtrl", function ($scope) {
