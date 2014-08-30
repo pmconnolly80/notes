@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>Dangerous Data in AngularJS</title>
+  <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../assets/js/angular.js"></script>
+  <script src="../assets/js/angular-sanitize.js"></script>
+  <script>
+    angular.module("exampleApp", ['ngSanitize'])
+      .controller("defaultCtrl", function ($scope, $sce) {
+        $scope.htmlData = "<p>This is <b onmouseover=alert('Attack!')>dangerous</b> data</p>";
+
+        $scope.$watch("htmlData", function (newValue) {
+          $scope.trustedData = $sce.trustAsHtml(newValue);
+        });
+      });
+  </script>
+</head>
+<body ng-controller="defaultCtrl">
+  <div class="container">
+
+    <h1>Dangerous Data</h1>
+
+    <p>Original Data:</p>
+    <p><input class="form-control" ng-model="htmlData" /></p>
+    
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Technique applied to display</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>DEFAULT - Strict contextual escaping (SCE)<br/>Everything is escaped.</td>
+          <td>{{htmlData}}</td>
+        </tr>
+        <tr>
+          <td><code>ng-bind-html</code> directive from <code>ngSanitize</code> module<br/>HTML is kept but dangerous content (script, css...) is stripped - alert() doesn't work</td>
+          <td ng-bind-html="htmlData"></td>
+        </tr>
+        <tr>
+          <td><code>ng-bind-html</code> directive from <code>ngSanitize</code> module + <code>$sce.trustAsHtml</code><br>Everything is kept as it - alert() works</td>
+          <td ng-bind-html="trustedData"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
