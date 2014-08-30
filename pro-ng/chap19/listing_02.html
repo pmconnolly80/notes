@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>Exceptions</title>
+  <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../assets/js/angular.js"></script>
+  <script>
+    angular.module("exampleApp", [])
+      .controller("defaultCtrl", function ($scope, $exceptionHandler) {
+        $scope.throwExUncaught = function () {
+          throw new Error("Uncaught Exception");
+        }
+        $scope.throwExCaught = function () {
+          try {
+            throw new Error("Caught Exception");
+          } catch (ex) {
+            $exceptionHandler(ex.message, "Button Click");
+          }
+        }
+      });
+  </script>
+</head>
+<body ng-controller="defaultCtrl">
+  <div class="container">
+    <h1>Exceptions - The <code>$location</code> service</h1>
+    <button class="btn btn-default" ng-click="throwExUncaught()">Throw Uncaught Exception</button>
+    <button class="btn btn-default" ng-click="throwExCaught()">Throw Caught Exception</button>
+  </div>
+</body>
+</html>
