@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>The $location service</title>
+  <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../assets/js/angular.js"></script>
+  <script>
+    angular.module("exampleApp", [])
+
+      // .config(function($locationProvider) {
+      //   $locationProvider.html5Mode(true);
+      // })
+      
+      .controller("defaultCtrl", function ($scope, $location) {
+        // Change the URL to make the example more interesting.
+        $location.url('path?a=b#hash');
+        $scope.$location = $location;
+      });
+  </script>
+</head>
+<body ng-controller="defaultCtrl">
+  <h1>The <code>$location</code> service</h1>
+  <div class="container well">
+    <ul>
+      <li>$location.absUrl() = {{$location.absUrl()}}</li>
+      <li>$location.path() = {{$location.path()}}</li>
+      <li>$location.search() = {{$location.search()}}</li>
+      <li>$location.hash() = {{$location.hash()}}</li>
+    </ul>
+  </div>
+</body>
+</html>
