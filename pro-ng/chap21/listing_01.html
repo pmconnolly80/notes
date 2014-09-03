@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html ng-app="exampleApp">
+<head>
+  <title>RESTful Services in AngularJS</title>
+  <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../assets/js/angular.js"></script>
+  <script src="products_mock.js"></script>
+</head>
+<body ng-controller="defaultCtrl">
+  <div class="panel panel-primary">
+    <h1>RESTful Services in AngularJS</h1>
+    <h3 class="panel-heading">Products</h3>
+    <ng-include src="'tableView.html'" ng-show="displayMode == 'list'"></ng-include>
+    <ng-include src="'editorView.html'" ng-show="displayMode == 'edit'"></ng-include>
+  </div>
+</body>
+</html>
