@@ -1,5 +1,5 @@
 /**
- * Mock products -- DOES NOT use the RESTful API.
+ * Mock products data -- DOES NOT use the RESTful API.
  */
 angular.module("exampleApp", [])
   .controller("defaultCtrl", function($scope) {
