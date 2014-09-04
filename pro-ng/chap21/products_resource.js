@@ -1,68 +1,55 @@
 /**
  * **REAL** products data -- Uses data from Mongolab.
  */
-angular.module("exampleApp", [])
+angular.module("exampleApp", ['ngResource'])
   
   .constant("MONGOLAB_API_KEY", "ISXsR31X7VQjheVFt3rAMLTMrr0EXu89")
   .constant("MONGOLAB_BASE_URL", "https://api.mongolab.com/api/1/databases/angular1/collections/products")
   
-  // .config(function ($httpProvider, MONGOLAB_BASE_URL, MONGOLAB_API_KEY) {
-  //   $httpProvider.interceptors.push(function () {
-  //     return {
-  //       // Add the API key if we're requesting a Mongolab URL.
-  //       request: function (config) {
-  //         if (config.url == MONGOLAB_BASE_URL) {
-  //           config.url += '?apiKey=' + MONGOLAB_API_KEY;
-  //         }
-  //         return config;
-  //       }
-  //     };
-  //   });
-  // })
+  .config(function ($httpProvider, MONGOLAB_BASE_URL, MONGOLAB_API_KEY) {
+    $httpProvider.interceptors.push(function () {
+      return {
+        // Add the API key if we're requesting a Mongolab URL.
+        request: function (config) {
+          if (config.url.indexOf('https://api.mongolab.com') === 0) {
+            config.url += '?apiKey=' + MONGOLAB_API_KEY;
+          }
+          return config;
+        }
+      };
+    });
+  })
   
-  .controller("defaultCtrl", function($scope, $http, MONGOLAB_BASE_URL, MONGOLAB_API_KEY) {
+  .controller("defaultCtrl", function($scope, $resource, MONGOLAB_BASE_URL) {
 
     $scope.displayMode = "list";
     $scope.currentProduct = null;
 
-    $scope.listProducts = function () {
-      var url = MONGOLAB_BASE_URL + '?apiKey=' + MONGOLAB_API_KEY;
-      $http.get(url).success(function (data) {
-        $scope.products = data;
-      });
-    };
+    $scope.productsResource = $resource(MONGOLAB_BASE_URL + "/:id", { id: "@_id.$oid" }, {
+      update: {method: 'PUT'}
+    });
+
+    console.log(MONGOLAB_BASE_URL.indexOf('https://api.mongolab.com'));
+
+    $scope.products = $scope.productsResource.query();
 
     $scope.deleteProduct = function (product) {
-      $http({
-        method: "DELETE",
-        url: MONGOLAB_BASE_URL + '/' + product._id.$oid + '?apiKey=' + MONGOLAB_API_KEY
-      }).success(function () {
+      product.$delete().then(function () {
         $scope.products.splice($scope.products.indexOf(product), 1);
       });
+      $scope.displayMode = "list";
     };
 
     $scope.createProduct = function(product) {
-      $http.post(MONGOLAB_BASE_URL + '?apiKey=' + MONGOLAB_API_KEY, product).success(function (newProduct) {
-        $scope.products.push(product);
+      new $scope.productsResource(product).$save().then(function(newProduct) {
+        $scope.products.push(newProduct);
         $scope.displayMode = "list";
       });
     };
 
     $scope.updateProduct = function(product) {
-      var product_id = product._id.$oid;
-      delete product._id;  // Don't include the ID when PUTting an object
-      $http({
-        url: MONGOLAB_BASE_URL + '/' + product_id + '?apiKey=' + MONGOLAB_API_KEY,
-        method: "PUT",
-        data: product
-      }).success(function (modifiedProduct) {
-        for (var i = 0; i < $scope.products.length; i++) {
-          if ($scope.products[i]._id.$oid == modifiedProduct._id.$oid) {
-            $scope.products[i] = modifiedProduct;
-            break;
-          }
-        }
-      });
+      update
+      product.$save();
       $scope.displayMode = "list";
     };
 
@@ -72,7 +59,8 @@ angular.module("exampleApp", [])
     };
 
     $scope.saveEdit = function(product) {
-      if (angular.isDefined(product._id.$oid)) {
+      console.log('saveEdit', product);
+      if (angular.isDefined(product._id) && angular.isDefined(product._id.$oid)) {
         $scope.updateProduct(product);
       } else {
         $scope.createProduct(product);
@@ -80,9 +68,12 @@ angular.module("exampleApp", [])
     };
 
     $scope.cancelEdit = function() {
+      if ($scope.currentProduct && $scope.currentProduct.$get) {
+        $scope.currentProduct.$get();
+      }
       $scope.currentProduct = {};
       $scope.displayMode = "list";
     };
 
-    $scope.listProducts();
+    // $scope.listProducts();
   });
