@@ -1,5 +1,5 @@
 /**
- * **REAL** products -- Uses data from Mongolab.
+ * **REAL** products data -- Uses data from Mongolab.
  */
 angular.module("exampleApp", [])
   
@@ -42,28 +42,37 @@ angular.module("exampleApp", [])
     };
 
     $scope.createProduct = function(product) {
-      $scope.products.push(product);
-      $scope.displayMode = "list";
+      $http.post(MONGOLAB_BASE_URL + '?apiKey=' + MONGOLAB_API_KEY, product).success(function (newProduct) {
+        $scope.products.push(product);
+        $scope.displayMode = "list";
+      });
     };
 
     $scope.updateProduct = function(product) {
-      for (var i = 0; i < $scope.products.length; i++) {
-        if ($scope.products[i].id == product.id) {
-          $scope.products[i] = product;
-          break;
+      var product_id = product._id.$oid;
+      delete product._id;  // Don't include the ID when PUTting an object
+      $http({
+        url: MONGOLAB_BASE_URL + '/' + product_id + '?apiKey=' + MONGOLAB_API_KEY,
+        method: "PUT",
+        data: product
+      }).success(function (modifiedProduct) {
+        for (var i = 0; i < $scope.products.length; i++) {
+          if ($scope.products[i]._id.$oid == modifiedProduct._id.$oid) {
+            $scope.products[i] = modifiedProduct;
+            break;
+          }
         }
-      }
+      });
       $scope.displayMode = "list";
     };
 
     $scope.editOrCreateProduct = function(product) {
-      $scope.currentProduct =
-        product ? angular.copy(product) : {};
+      $scope.currentProduct = product ? angular.copy(product) : {};
       $scope.displayMode = "edit";
     };
 
     $scope.saveEdit = function(product) {
-      if (angular.isDefined(product.id)) {
+      if (angular.isDefined(product._id.$oid)) {
         $scope.updateProduct(product);
       } else {
         $scope.createProduct(product);
