@@ -29,9 +29,9 @@ angular.module("exampleApp", ['ngResource'])
       update: {method: 'PUT'}
     });
 
-    console.log(MONGOLAB_BASE_URL.indexOf('https://api.mongolab.com'));
-
-    $scope.products = $scope.productsResource.query();
+    $scope.listProducts = function () {
+      $scope.products = $scope.productsResource.query();
+    };
 
     $scope.deleteProduct = function (product) {
       product.$delete().then(function () {
@@ -48,8 +48,9 @@ angular.module("exampleApp", ['ngResource'])
     };
 
     $scope.updateProduct = function(product) {
-      update
-      product.$save();
+      var product_id = product._id.$oid;
+      delete product._id;  // Don't include the ID when PUTting an object
+      product.$update({id: product_id});  // Custom method
       $scope.displayMode = "list";
     };
 
@@ -59,7 +60,6 @@ angular.module("exampleApp", ['ngResource'])
     };
 
     $scope.saveEdit = function(product) {
-      console.log('saveEdit', product);
       if (angular.isDefined(product._id) && angular.isDefined(product._id.$oid)) {
         $scope.updateProduct(product);
       } else {
@@ -75,5 +75,5 @@ angular.module("exampleApp", ['ngResource'])
       $scope.displayMode = "list";
     };
 
-    // $scope.listProducts();
+    $scope.listProducts();
   });
