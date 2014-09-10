@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="filmApp">
+<head>
+  <title>Les films de Vince</title>
+  <link href="../assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-theme.css" rel="stylesheet" />
+  <script src="../assets/js/angular.js"></script>
+  <script>
+    var model = {
+      user: "Vince"
+    };
+
+    var filmApp = angular.module("filmApp", []);
+
+    filmApp.run(function ($http) {
+      $http.get('movies.json').success(function (data) {
+        model.movies = data;
+      });
+    });
+
+    filmApp.controller('movieCtrl', function($scope) {
+      $scope.data = model;
+
+      $scope.incompleteCount = function () {
+        var count = 0;
+        angular.forEach($scope.data.movies, function (movie) {
+          if (!movie.seen) { count++ }
+        });
+        return count;
+      }
+
+      $scope.warningLevel = function () {
+        return $scope.incompleteCount() < 3 ? "label-success" : "label-warning";
+      }
+
+      $scope.addNewItem = function (movieTitle) {
+        $scope.data.movies.push({ title: movieTitle, seen: false });
+      }
+    });
+
+    // This custom filter returns movies that are either "not seen"
+    // or any movie if showComplete == true
+    filmApp.filter('checkedItems', function () {
+      return function (movies, showComplete) {
+        var resultArr = [];
+        angular.forEach(movies, function (movie) {
+          if (movie.seen == false || showComplete == true) {
+            resultArr.push(movie);
+          }
+        });
+        return resultArr;
+      }
+    });
+  </script>
+</head>
+<body ng-controller="movieCtrl">
+  <header>
+    <h1>Les films de {{data.user}}
+      <span class="label label-default" ng-hide="incompleteCount() == 0" ng-class="warningLevel()">
+        {{incompleteCount()}}
+      </span>
+    </h1>
+  </header>
+  <div class="panel">
+    <div class="input-group">
+      <input class="form-control" ng-model="movieTitle" />
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="addNewItem(movieTitle)">Ajouter</button>
+      </span>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Vu</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="movie in data.movies | checkedItems:showComplete | orderBy:'title'">
+          <td>{{movie.title}}</td>
+          <td><input type="checkbox" ng-model="movie.seen" /></td>
+          <td>{{movie.seen}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="checkbox-inline">
+      <label><input type="checkbox" ng_model="showComplete"> Show Complete</label>
+    </div>
+  </div>
+</body>
+</html>
