@@ -60,6 +60,13 @@
           <th></th>
         </tr>
       </thead>
+      <tbody>
+        <tr ng-repeat="movie in data.movies | filter:{seen: false} | orderBy:'title'">
+          <td>{{movie.title}}</td>
+          <td><input type="checkbox" ng-model="movie.seen" /></td>
+          <td>{{movie.seen}}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </body>
