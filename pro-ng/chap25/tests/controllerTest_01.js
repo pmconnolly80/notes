@@ -32,13 +32,16 @@ describe("Controller Test 01", function() {
   }));
 
   // Teste le backend.
+  
   it("Verifies that all of the requests defined via the expect api were made", function () {
     backend.verifyNoOutstandingExpectation();
   });
+
   it("Processes the data", function () {
     expect(mockScope.products).toBeDefined();
     expect(mockScope.products.length).toEqual(3);
   });
+
   it("Preserves the data order", function () {
     expect(mockScope.products[0].name).toEqual("Apples");
     expect(mockScope.products[1].name).toEqual("Bananas");
