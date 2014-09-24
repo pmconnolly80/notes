@@ -4,7 +4,8 @@ describe("Directive Tests", function() {
 
   beforeEach(angular.mock.module("exampleApp05"));
 
-  // Instancie le filtre programmatiquement avant chaque test grâce au service $filter.
+  // Avant chaque test, prépare un scope contenant les données utilisées par la directive
+  // et injecte le service $compile.
   beforeEach(angular.mock.inject(function($rootScope, $compile) {
     mockScope = $rootScope.$new();
     compileService = $compile;
@@ -16,6 +17,7 @@ describe("Directive Tests", function() {
   }));
 
   it("Generates list elements", function () {
+    // Execute la directive programmatiquement sur le scope qu'on a préparé.
     var compileFn = compileService("<div unordered-list='data'></div>");
     var elem = compileFn(mockScope);
     expect(elem.children("ul").length).toEqual(1);
