@@ -1,3 +1,4 @@
+//
 describe("Controller Test", function() {
   // Arrange
   var mockScope = {};

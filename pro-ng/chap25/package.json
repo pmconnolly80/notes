@@ -1,0 +1,17 @@
+{
+  "name": "chap25",
+  "version": "1.0.0",
+  "description": "Experimenting with unit tests in AngularJS",
+  "private": true,
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "author": "Vince C.",
+  "license": "ISC",
+  "devDependencies": {
+    "karma": "^0.12.23",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5"
+  }
+}
