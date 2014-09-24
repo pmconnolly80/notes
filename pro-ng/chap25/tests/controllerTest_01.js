@@ -10,14 +10,15 @@ describe("Controller Test 01", function() {
   // et les réponses correspondantes.
   beforeEach(angular.mock.inject(function ($httpBackend) {
     backend = $httpBackend;
+    // Le backend attend une requête GET sur l'URL "productData.json".
     backend.expect("GET", "productData.json").respond(
     [{ "name": "Apples", "category": "Fruit", "price": 1.20 },
     { "name": "Bananas", "category": "Fruit", "price": 2.42 },
     { "name": "Pears", "category": "Fruit", "price": 2.02 }]);
   }));
 
-  // Instancie programmatiquement le contrôleur à tester
-  // en y injectant toutes les dépendances dont il a besoin.
+  // Notez qu'on injecte une dépendance supplémentaire ($http)
+  // pour pouvoir la passer au contrôleur.
   beforeEach(angular.mock.inject(function($controller, $rootScope, $http) {
     mockScope = $rootScope.$new();
     // Initialise le contrôleur (qui va émettre une requête HTTP GET).
@@ -26,7 +27,7 @@ describe("Controller Test 01", function() {
       $http: $http
     });
     // Déclenche la réponse à la requête émise par le contrôleur.
-    // Si besoin, on aurait pu attendre un peu (timeout) avant de répondre.
+    // Si besoin, on aurait pu attendre un peu (timeout) avant d'envoyer la réponse.
     backend.flush();
   }));
 
