@@ -3,7 +3,7 @@ describe("Filter Tests", function() {
 
   beforeEach(angular.mock.module("exampleApp04"));
 
-  // Instancie le filtre programmatiquement.
+  // Instancie le filtre programmatiquement avant chaque test grâce au service $filter.
   beforeEach(angular.mock.inject(function($filter) {
     filterInstance = $filter("labelCase");
   }));
