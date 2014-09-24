@@ -1,4 +1,5 @@
 angular.module("exampleApp04", [])
+
   .filter("labelCase", function() {
     return function(value, reverse) {
       if (angular.isString(value)) {
